@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox alignment="center" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.RegController" spacing="10">
+
+    <Label text="Login" />
+    <TextField fx:id="loginField" maxWidth="Infinity" HBox.hgrow="ALWAYS" promptText="Login..."/>
+    <Label text="Password" />
+    <PasswordField fx:id="passwordField" maxWidth="Infinity" HBox.hgrow="ALWAYS" promptText="Password..." />
+    <Label text="Username" />
+    <TextField fx:id="nicknameField" promptText="Username..." maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+    <TextArea fx:id="messageArea" VBox.vgrow="ALWAYS" editable="false"/>
+    <HBox spacing="10">
+        <Button fx:id="signUp"  text="Sign Up" onAction="#tryToSignup" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <Button fx:id="cancel"  text="Cancel" onAction="#cancel" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+    </HBox>
+    <padding><Insets bottom="10" left="10" right="10"  top="10"/></padding>
+
+</VBox>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox alignment="center" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Controller">
+<padding><Insets bottom="10" left="10" right="10" top="10" /></padding>
+
+    <HBox alignment="center" spacing="10" fx:id="authPanel">
+        <TextField fx:id="loginField" maxWidth="Infinity" HBox.hgrow="ALWAYS" promptText="Login..."/>
+        <PasswordField fx:id="passwordField" maxWidth="Infinity" HBox.hgrow="ALWAYS" promptText="Password..." onAction="#tryToAuth"/>
+        <Button fx:id="loginBtn"  text="Sign In" onAction="#tryToAuth"/>
+        <Button fx:id="signupBtn"  text="Sign Up" onAction="#showRegWindow"/>
+        <padding><Insets bottom="10"/></padding>
+    </HBox>
+
+    <HBox VBox.vgrow="ALWAYS">
+        <ListView fx:id="clientList" minWidth="80" visible="false" managed="false" onMouseReleased="#clickClientList"/>
+        <TextArea fx:id="chatArea" editable="false" HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+
+    <HBox alignment="center" spacing="10" fx:id="chatPanel" visible="false" managed="false">
+        <TextField fx:id="messageField" maxWidth="Infinity" HBox.hgrow="ALWAYS" onAction="#sendMessage"/>
+        <Button fx:id="sendBtn"  text="Send" onAction="#sendMessage"/>
+        <padding><Insets top="10 "/></padding>
+    </HBox>
+
+</VBox>
