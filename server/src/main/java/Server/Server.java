@@ -94,5 +94,10 @@ public class Server {
             client.sendMessage(message);
         }
     }
+
+    void changeNickname(String login, String newNickname) {
+        authService.changeNickname(login, newNickname);
+        broadcastClientList();
+    }
 }
 

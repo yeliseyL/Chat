@@ -15,6 +15,7 @@ public class ClientHandler {
     DataOutputStream out;
     private String nickname;
     private String login;
+    private String password;
 
     public ClientHandler(Server server, Socket socket) {
         try {
@@ -38,6 +39,7 @@ public class ClientHandler {
                                     .getAuthService()
                                     .getNicknameByLoginAndPassword(token[1], token[2]);
                             login = token[1];
+                            password = token[2];
 
                             if (newNick != null) {
                                 if (!server.isLoginAuthorized(login)) {
@@ -84,6 +86,14 @@ public class ClientHandler {
                                 server.sendPrivateMessage(this, token[1], token[2]);
                             }
 
+                            if (str.startsWith("/chnick ")) {
+                                String[] token = str.split("\\s", 2);
+                                if (token.length < 2) {
+                                    continue;
+                                }
+                                server.changeNickname(this.login, token[1]);
+                            }
+
                         } else {
                             server.broadcastMessage(this, str);
                         }
@@ -115,7 +125,7 @@ public class ClientHandler {
     }
 
     public String getNickname() {
-        return nickname;
+        return server.getAuthService().getNicknameByLoginAndPassword(login, password);
     }
 
 
