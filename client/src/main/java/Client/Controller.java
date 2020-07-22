@@ -13,11 +13,11 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -49,6 +49,7 @@ public class Controller implements Initializable {
 
     private Boolean authenticated;
     private String nickname;
+    private String login;
 
     private Stage stage;
     private Stage regStage;
@@ -107,7 +108,9 @@ public class Controller implements Initializable {
 
                         if (str.startsWith("/authok ")) {
                             nickname = str.split("\\s")[1];
+                            login = str.split("\\s")[2];
                             setAuthenticated(true);
+                            showLog();
                             break;
                         }
 
@@ -119,9 +122,7 @@ public class Controller implements Initializable {
                                 regController.addSystemMessage("Registration failed! \nLogin or username already exists.");
                             }
                         }
-
                         chatArea.appendText(str);
-
                     }
                     // work cycle
                     while (true) {
@@ -143,6 +144,7 @@ public class Controller implements Initializable {
 
                         } else {
                             chatArea.appendText(str);
+                            writeLog(str);
                         }
                     }
                 } catch (IOException e) {
@@ -156,6 +158,51 @@ public class Controller implements Initializable {
                 }
             }).start();
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeLog(String message) {
+        String path = "client/logs/history_" + login + ".txt";
+        String pathDir = "client/logs/";
+        File file = new File(path);
+        File dir = new File(pathDir);
+
+        try {
+            if(!dir.exists()) {
+                dir.mkdirs();
+            }
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            try (PrintWriter printWriter = new PrintWriter(new FileWriter(path, true))) {
+                printWriter.print(message);
+            }
+        } catch (IOException e) {
+            System.out.println("Error writing into file");
+            e.printStackTrace();
+        }
+    }
+
+    public void showLog() {
+        String path = "client/logs/history_" + login + ".txt";
+        File file = new File(path);
+
+        try {
+            if (file.exists()) {
+                try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+                    String line = reader.readLine();
+                    for (int i = 0; i < 100; i++) {
+                        while (line != null) {
+                            chatArea.appendText(line);
+                            chatArea.appendText("\n");
+                            line = reader.readLine();
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading file");
             e.printStackTrace();
         }
     }

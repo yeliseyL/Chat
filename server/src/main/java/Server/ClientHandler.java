@@ -43,7 +43,7 @@ public class ClientHandler {
 
                             if (newNick != null) {
                                 if (!server.isLoginAuthorized(login)) {
-                                    sendMessage("/authok " + newNick);
+                                    sendMessage("/authok " + newNick + " " + login);
                                     nickname = newNick;
                                     server.subscribe(this);
                                     System.out.printf("Client %s connected %n", nickname);
