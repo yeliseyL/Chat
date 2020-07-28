@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
 
 public class ClientHandler {
@@ -23,12 +25,12 @@ public class ClientHandler {
             this.socket = socket;
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
-
-            new Thread(() -> {
+            ExecutorService executorService = Executors.newFixedThreadPool(10);
+            executorService.execute(() -> {
                 try {
                     //auth cycle
+                    socket.setSoTimeout(120_000);
                     while (true) {
-                        socket.setSoTimeout(120_000);
                         String str = in.readUTF();
                         if (str.startsWith("/auth ")) {
                             String[] token = str.split("\\s");
@@ -114,11 +116,12 @@ public class ClientHandler {
                     server.unsubscribe(this);
                     try {
                         socket.close();
+                        executorService.shutdown();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-            }).start();
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
