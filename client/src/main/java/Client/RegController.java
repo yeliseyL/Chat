@@ -9,7 +9,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class RegController {
+    private static final Logger logger = Logger.getLogger(RegController.class.getName());
     private Controller controller;
 
     public void setController(Controller controller) {
@@ -43,5 +47,6 @@ public class RegController {
 
     public void addSystemMessage(String message) {
         messageArea.appendText(message + "\n");
+        logger.log(Level.INFO, message);
     }
 }

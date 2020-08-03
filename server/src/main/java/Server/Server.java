@@ -5,8 +5,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.List;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Server {
+    private static final Logger logger = Logger.getLogger(Server.class.getName());
     private List<ClientHandler> clients;
     private AuthService authService;
 
@@ -24,13 +27,11 @@ public class Server {
 
         try {
             server = new ServerSocket(PORT);
-            System.out.println("Server is running");
+            logger.log(Level.INFO, "Server is running");
 
             while (true) {
                 socket = server.accept();
-                System.out.println("Client connected");
-                System.out.println("Remote socket address: " + socket.getRemoteSocketAddress());
-                System.out.println("Local socket address: " + socket.getLocalSocketAddress());
+                logger.log(Level.INFO, "Client connected. Remote socket address: " + socket.getRemoteSocketAddress() + " Local socket address: " + socket.getLocalSocketAddress());
                 new ClientHandler(this, socket);
             }
         } catch (IOException e) {
@@ -100,4 +101,3 @@ public class Server {
         broadcastClientList();
     }
 }
-
