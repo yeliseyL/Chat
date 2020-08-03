@@ -19,6 +19,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Controller implements Initializable {
     @FXML
@@ -41,6 +43,7 @@ public class Controller implements Initializable {
     private final int PORT = 8806;
     private final String IP_ADDRESS = "localhost";
     private final String CHAT_TITLE_EMPTY = "Chat";
+    private static final Logger logger = Logger.getLogger(Controller.class.getName());
 
 
     private Socket socket;
@@ -179,7 +182,7 @@ public class Controller implements Initializable {
                 printWriter.print(message);
             }
         } catch (IOException e) {
-            System.out.println("Error writing into file");
+            logger.log(Level.INFO, "Error writing into file");
             e.printStackTrace();
         }
     }

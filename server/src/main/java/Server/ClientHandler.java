@@ -9,6 +9,8 @@ import java.net.SocketTimeoutException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientHandler {
     Server server;
@@ -18,6 +20,7 @@ public class ClientHandler {
     private String nickname;
     private String login;
     private String password;
+    private static final Logger logger = Logger.getLogger(ClientHandler.class.getName());
 
     public ClientHandler(Server server, Socket socket) {
         try {
@@ -48,12 +51,14 @@ public class ClientHandler {
                                     sendMessage("/authok " + newNick + " " + login);
                                     nickname = newNick;
                                     server.subscribe(this);
-                                    System.out.printf("Client %s connected %n", nickname);
+                                    logger.log(Level.INFO, String.format("Client %s connected %n", nickname));
                                     break;
                                 } else {
+                                    logger.log(Level.INFO, "This login has been already authorized.");
                                     sendMessage("This login has been already authorized.");
                                 }
                             } else {
+                                logger.log(Level.INFO, "Wrong login or password!\n");
                                 sendMessage("Wrong login or password!\n");
                             }
                         }
@@ -102,6 +107,7 @@ public class ClientHandler {
 
                     }
                 } catch (SocketTimeoutException e) {
+                    logger.log(Level.INFO, "Timeout, connection terminated!");
                     sendMessage("Timeout, connection terminated!");
                     try {
                         Thread.sleep(1000);
@@ -112,7 +118,7 @@ public class ClientHandler {
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
-                    System.out.println("Client offline");
+                    logger.log(Level.INFO, "Client offline");
                     server.unsubscribe(this);
                     try {
                         socket.close();
